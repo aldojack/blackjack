@@ -130,10 +130,13 @@ function checkCards(cardsTotal){
     else if(cardsTotal >blackJack){
         message = "You bust 😭";
         isBust = true;
+        gameActive = false;
+
     }
     else{
         message = "Winner winner chicken dinner 🥳";
         hasBlackJack = true;
+        gameActive = false;
     }
     messageEl.textContent = message;
 }
