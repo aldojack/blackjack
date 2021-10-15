@@ -1,15 +1,20 @@
 //Doms
 let messageEl = document.getElementById('message-el');
-let sumEl = document.getElementById("sum-el");
+let playerSumEl = document.getElementById("playerSum-el");
+let dealerSumEl = document.getElementById("dealerSum-el");
+
 let cardsEl = document.getElementById("cards-el");
 let dealerEl = document.getElementById("dealer-el");
 
 //Bools
 let hasBlackJack = false;
+let has21 = false;
 let isBust = false;
+let gameActive = false;
 
 //Ints
 let playerSum = 0;
+let dealerSum = 0;
 let blackJack = 21;
 let playerCards = [];
 let playerCardCount = playerCards.length;
@@ -23,50 +28,89 @@ function getCard(){
     return Math.floor(Math.random() * 10) + 2;
 }
 
-
-
 function startGame(){
-    //Player is dealt 2 cards and displayed on UI
-    playerCards.push(getCard());
-    playerCards.push(getCard());
-    ShowCards(playerCards);
 
-    //Dealer is dealt 1 card and displayed
-    dealerCards.push(getCard());
-    dealerEl.textContent += ` ${dealerCards[0]}`;
-
-    //Returns total sum of player cards then displays on UI
-    playerSum = playerCards.reduce(GetSum);
-    sumEl.textContent = `Sum: ${playerSum}`;
-    checkCards(playerSum,0);
+    if(!gameActive)
+    {
+        //Player is dealt 2 cards and displayed on UI
+        playerCards.push(getCard());
+        playerCards.push(getCard());
+        ShowPlayerCards(playerCards);
+    
+        //Dealer is dealt 1 card and displayed
+        dealerCards.push(getCard());
+        dealerSum = dealerCards.reduce(GetSum);
+        dealerEl.textContent += ` ${dealerCards[0]}`;
+        dealerSumEl.textContent = `Total: ${dealerSum}`;
+    
+        //Returns total sum of player cards then displays on UI
+        playerSum = playerCards.reduce(GetSum);
+        playerSumEl.textContent = `Total: ${playerSum}`;
+        checkCards(playerSum,0);
+        gameActive = true;
+    }
+    else{
+        reset();
+    }
 }
 
 function reset(){
     messageEl.textContent = "Want to play a round?";
     dealerEl.textContent = `Dealer: `;
-    sumEl.textContent = `Sum: `;
+    playerSumEl.textContent = `Total: `;
+    dealerSumEl.textContent = `Total: `;
     cardsEl.textContent = `Cards: `;
     playerCards =[];
     dealerCards = [];
     playerSum = 0;
     hasBlackJack = false;
     isBust = false;  
+    gameActive = false;
+    clearInterval(dealer);
 }
 
 function hit(){
-    playerCards.push(getCard());
-    playerSum = playerCards.reduce(GetSum);
-    sumEl.textContent = `Sum: ${playerSum}`;
-    checkCards(playerSum,0);
-    ShowCards(playerCards);
+    if((!isBust) && (!hasBlackJack) && (!has21))
+    {
+        playerCards.push(getCard());
+        playerSum = playerCards.reduce(GetSum);
+        playerSumEl.textContent = `Total: ${playerSum}`;
+        checkCards(playerSum,0);
+        ShowPlayerCards(playerCards);
+    }
 }
 
-function ShowCards(cards){
+function stand(){
+    /*
+    If dealer has 16 or less then they must draw a card
+    */
+   if(dealerSum <=16){
+       dealerCards.push(getCard());
+       dealerSum = dealerCards.reduce(GetSum);
+       ShowDealerCards(dealerCards);
+       dealerSumEl.textContent = `Total: ${dealerSum}`;
+   }
+   else{
+    checkWinner(playerSum, dealerSum);
+    clearInterval(dealer);
+   }
+}
+
+function ShowPlayerCards(cards){
     cardsEl.textContent = `Cards: `;
 
     for(let i = 0;i<cards.length;i++)
     {
         cardsEl.textContent += ` ${cards[i]}`;
+    }
+}
+
+function ShowDealerCards(cards){
+    dealerEl.textContent = `Cards: `;
+
+    for(let i = 0;i<cards.length;i++)
+    {
+        dealerEl.textContent += ` ${cards[i]}`;
     }
 }
 
@@ -86,6 +130,19 @@ function checkCards(cardsTotal){
     else{
         message = "Winner winner chicken dinner 🥳";
         hasBlackJack = true;
+    }
+    messageEl.textContent = message;
+}
+
+function checkWinner(player, dealer){
+    if((player < dealer) && (dealer <= blackJack)){
+        message = "Dealer Wins!";
+    }
+    else if((player > dealer) && (player <= blackJack)){
+        message = "Player wins!";
+    }
+    else{
+        message = "Draw!";
     }
     messageEl.textContent = message;
 }
