@@ -142,11 +142,10 @@ function checkCards(cardsTotal){
 }
 
 function checkWinner(player, dealer){
-    //18 < 23 & 23 <= 21 = false
+    
     if((dealer > player) && (dealer <= blackJack)){
         message = "Dealer Wins!";
     }
-    //18 > 23 & 18 <= 21 = false
     else if(player === dealer){
         message = "Draw";
     }
