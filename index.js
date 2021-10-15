@@ -8,7 +8,6 @@ let dealerEl = document.getElementById("dealer-el");
 
 //Bools
 let hasBlackJack = false;
-let has21 = false;
 let isBust = false;
 let gameActive = false;
 
@@ -72,7 +71,7 @@ function reset(){
 function hit(){
     if(gameActive)
     {
-        if((!isBust) && (!hasBlackJack) && (!has21))
+        if((!isBust) && (!hasBlackJack))
         {
             playerCards.push(getCard());
             playerSum = playerCards.reduce(GetSum);
@@ -90,8 +89,8 @@ function stand(){
    if(gameActive){
        if(dealerSum <=16){
            dealerCards.push(getCard());
-           dealerSum = dealerCards.reduce(GetSum);
            ShowDealerCards(dealerCards);
+           dealerSum = dealerCards.reduce(GetSum);
            dealerSumEl.textContent = `Total: ${dealerSum}`;
        }
        else{
@@ -140,9 +139,11 @@ function checkCards(cardsTotal){
 }
 
 function checkWinner(player, dealer){
-    if((player < dealer) && (dealer <= blackJack)){
+    //18 < 23 & 23 <= 21 = false
+    if((dealer > player) && (dealer <= blackJack)){
         message = "Dealer Wins!";
     }
+    //18 > 23 & 18 <= 21 = false
     else if((player > dealer) && (player <= blackJack)){
         message = "Player wins!";
     }
