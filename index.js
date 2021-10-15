@@ -26,23 +26,28 @@ function getCard(){
 
 
 function startGame(){
+    //Player is dealt 2 cards and displayed on UI
     playerCards.push(getCard());
     playerCards.push(getCard());
-    dealerCards.push(getCard());
+    ShowCards(playerCards);
 
+    //Dealer is dealt 1 card and displayed
+    dealerCards.push(getCard());
+    dealerEl.textContent += ` ${dealerCards[0]}`;
+
+    //Returns total sum of player cards then displays on UI
     playerSum = playerCards.reduce(GetSum);
     sumEl.textContent = `Sum: ${playerSum}`;
-
     checkCards(playerSum,0);
-    ShowCards(playerCards);
-    dealerEl.textContent = `Dealer: `
 }
 
 function reset(){
     messageEl.textContent = "Want to play a round?";
+    dealerEl.textContent = `Dealer: `;
     sumEl.textContent = `Sum: `;
-    cardsEl.textContent = `Cards: `
+    cardsEl.textContent = `Cards: `;
     playerCards =[];
+    dealerCards = [];
     playerSum = 0;
     hasBlackJack = false;
     isBust = false;  
