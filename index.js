@@ -70,13 +70,16 @@ function reset(){
 }
 
 function hit(){
-    if((!isBust) && (!hasBlackJack) && (!has21))
+    if(gameActive)
     {
-        playerCards.push(getCard());
-        playerSum = playerCards.reduce(GetSum);
-        playerSumEl.textContent = `Total: ${playerSum}`;
-        checkCards(playerSum,0);
-        ShowPlayerCards(playerCards);
+        if((!isBust) && (!hasBlackJack) && (!has21))
+        {
+            playerCards.push(getCard());
+            playerSum = playerCards.reduce(GetSum);
+            playerSumEl.textContent = `Total: ${playerSum}`;
+            checkCards(playerSum,0);
+            ShowPlayerCards(playerCards);
+        }
     }
 }
 
@@ -84,15 +87,17 @@ function stand(){
     /*
     If dealer has 16 or less then they must draw a card
     */
-   if(dealerSum <=16){
-       dealerCards.push(getCard());
-       dealerSum = dealerCards.reduce(GetSum);
-       ShowDealerCards(dealerCards);
-       dealerSumEl.textContent = `Total: ${dealerSum}`;
-   }
-   else{
-    checkWinner(playerSum, dealerSum);
-    clearInterval(dealer);
+   if(gameActive){
+       if(dealerSum <=16){
+           dealerCards.push(getCard());
+           dealerSum = dealerCards.reduce(GetSum);
+           ShowDealerCards(dealerCards);
+           dealerSumEl.textContent = `Total: ${dealerSum}`;
+       }
+       else{
+        checkWinner(playerSum, dealerSum);
+        clearInterval(dealer);
+       }
    }
 }
 
