@@ -144,12 +144,13 @@ function checkWinner(player, dealer){
         message = "Dealer Wins!";
     }
     //18 > 23 & 18 <= 21 = false
-    else if((player > dealer) && (player <= blackJack)){
-        message = "Player wins!";
+    else if(player === dealer){
+        message = "Draw";
     }
     else{
-        message = "Draw!";
+        message = "Player Wins!";
     }
+    gameActive = false;
     messageEl.textContent = message;
 }
 
