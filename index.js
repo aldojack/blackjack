@@ -29,7 +29,7 @@ function getCard(){
 
 function startGame(){
 
-    if(!gameActive)
+    if(playerSum===0)
     {
         //Player is dealt 2 cards and displayed on UI
         playerCards.push(getCard());
@@ -74,7 +74,7 @@ function hit(){
         if((!isBust) && (!hasBlackJack))
         {
             playerCards.push(getCard());
-            playerSum = playerCards.reduce(GetSum);
+            playerSum = playerCards.reduce(GetSum,0);
             playerSumEl.textContent = `Total: ${playerSum}`;
             checkCards(playerSum,0);
             ShowPlayerCards(playerCards);
@@ -90,7 +90,7 @@ function stand(){
        if(dealerSum <=16){
            dealerCards.push(getCard());
            ShowDealerCards(dealerCards);
-           dealerSum = dealerCards.reduce(GetSum);
+           dealerSum = dealerCards.reduce(GetSum,0);
            dealerSumEl.textContent = `Total: ${dealerSum}`;
        }
        else{
